@@ -9,7 +9,7 @@ const HeroBanner = () => {
             <h3 className='text-5xl font-bold'>MID TEXT</h3>
             <img src="" alt="HeroBanner img" className='float-right'/>
             <div>
-                <Link href="/product/ID">
+                <Link href="/movies">
                     <button className='bg-red-600 py-1 px-5 rounded-xl text-white font-bold mt-8' type="button">Button Text</button>
                 </Link>
             </div>
