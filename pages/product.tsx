@@ -14,7 +14,7 @@ export default function product({ products }:any) {
     const name = products[0].name;
     axios.get(`https://api.pexels.com/v1/search?query=${name}&per_page=1`, {
       headers: {
-        "Authorization": `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
+        "Authorization": `${process.env.API_KEY}`,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
