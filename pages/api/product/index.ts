@@ -1,16 +1,13 @@
+import { randomInt } from "crypto";
 import clientPromise from "../../../lib/mongodb";
+import product from '../../product';
 
 export default async function handler(req: any, res: any) {
   try {
     const client = await clientPromise;
     const db = await client.db("grocery");
-    const movies = await db
-      .collection("items")
-      .find({})
-      .sort({ metacritic: -1 })
-      .limit(20)
-      .toArray();
-    res(movies);
+    const product = await db.collection("items").find({}).skip(randomInt(0,1000)).limit(1).toArray();
+    res.json(product);
   } catch (e) {
     res.status(500).json({ error: e });
   }
