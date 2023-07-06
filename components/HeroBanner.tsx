@@ -1,9 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Interface } from "readline";
-import product from "../pages/product";
-import { useState, useMemo } from "react";
-import axios from "axios";
+import Image from "next/image";
 import Product from "./Product";
 
 // Typescript product interface
@@ -15,16 +12,16 @@ interface Product {
   image_url: string;
   category: string;
   price: number;
-  id: number;
+  _id: number;
 }
 const HeroBanner = (product: Product) => {
   return (
-    <div className="w-screen bg-slate-300 p-10 pb-5 h-1/2 max-h-1/2 relative flex  ">
-      <div className="flex flex-col ">
+    <div className="w-screen bg-slate-300 h-1/2 max-h-1/2 relative flex  ">
+      <div className="flex flex-col p-10 pb-5 pr-8 ">
         <p className="text-2xl">{product.brand}</p>
         <h3 className="text-5xl font-bold">{product.name}</h3>
         <div>
-          <Link href="/movies">
+          <Link href={`/product/${product._id}`}>
             <button
               className="bg-red-600 py-6 px-14 rounded-xl text-white text-3xl font-bold mt-10"
               type="button"
@@ -41,11 +38,11 @@ const HeroBanner = (product: Product) => {
           </p>
         </div>
       </div>
-      <div className="flex-grow">
+      <div className="flex-grow ml-2">
         <img
           src={product.image_url}
           alt="HeroBanner image"
-          className="h-[100%] w-[90%] object-cover rounded-xl float-right "
+          className="h-full w-full object-cover  float-right "
         />
       </div>
     </div>

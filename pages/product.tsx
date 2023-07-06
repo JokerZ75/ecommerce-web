@@ -8,20 +8,20 @@ import { randomInt } from "crypto";
 
 
 export default function product({ products }:any) {
-  const [productImg, setImage] = useState("");
+  // const [productImg, setImage] = useState("");
 
-  useEffect(() => {
-    const name = products[0].name;
-    axios.get(`https://api.pexels.com/v1/search?query=${name}&per_page=1`, {
-      headers: {
-        "Authorization": `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }).then((response) => {
-      setImage(response.data.photos[0].src.medium);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const name = products[0].name;
+  //   axios.get(`https://api.pexels.com/v1/search?query=${name}&per_page=1`, {
+  //     headers: {
+  //       "Authorization": `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //   }).then((response) => {
+  //     setImage(response.data.photos[0].src.medium);
+  //   });
+  // }, []);
 
   return (
     <div className="">
@@ -33,7 +33,7 @@ export default function product({ products }:any) {
         {products.map((product:any) => (
           <li key={product.name}>
             <h1>{product.name}</h1>
-            <img src={`${productImg}`} alt="image" />
+            {/* <img src={`${productImg}`} alt="image" /> */}
           </li>
         ))}
       </ul>

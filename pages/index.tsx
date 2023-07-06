@@ -1,31 +1,23 @@
 import React from "react";
-import { FooterBanner, HeroBanner } from "../components";
+import { FooterBanner, HeroBanner, Product } from "../components";
 import clientPromise from "../lib/mongodb";
 import { randomInt } from "crypto";
 import product from "./product";
 import { useMemo, useEffect } from "react";
 import axios from "axios";
 
-const Home = ({ bestSeller }: any) => {
-  useEffect(() => {
-    const name = bestSeller.name;
-    const brand = bestSeller.brand;
-    axios
-      .get(
-        `https://api.pexels.com/v1/search?query=${name}+by+${brand}}&per_page=1`,
-        {
-          headers: {
-            Authorization: `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        bestSeller.image_url = response.data.photos[0].src.large;
-      });
-  }, [bestSeller]);
+interface ProductInterface {
+  brand: string;
+  format: string;
+  tags: string[];
+  name: string;
+  image_url: string;
+  category: string;
+  price: number;
+  _id: number;
+}
 
+const Home = ({ bestSeller, products }: any) => {
   return (
     <>
       <main className="h-screen">
@@ -37,7 +29,9 @@ const Home = ({ bestSeller }: any) => {
           </p>
         </div>
         <div className="grid justify-center">
-          {["product 1", "product 2"].map((product) => product)}
+          {products.map((product: ProductInterface) => (
+            <Product {...product} key={product._id} />
+          ))}
         </div>
       </main>
       <FooterBanner />
@@ -45,7 +39,7 @@ const Home = ({ bestSeller }: any) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
     const client = await clientPromise;
     const db = client.db("grocery");
@@ -57,34 +51,55 @@ export async function getServerSideProps() {
       .skip(randomInt(0, 10000))
       .toArray();
 
-    const bestSellerProduct = JSON.parse(JSON.stringify(bestSeller[0])); 
+    const bestSellerProduct = JSON.parse(JSON.stringify(bestSeller[0]));
     const name = bestSellerProduct.name;
-    const brand = bestSellerProduct.brand;
-    await axios
-      .get(
-        `https://api.pexels.com/v1/search?query=${name}+by+${brand}&per_page=1`,
-        {
-          headers: {
-            Authorization: `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        bestSellerProduct.image_url = response.data.photos[0].src.large;
+    await fetch(`https://api.pexels.com/v1/search?query=${name}&per_page=1`, {
+      headers: {
+        Authorization: `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then((response) => {
+      response.json().then((data) => {
+        bestSellerProduct.image_url = data.photos[0].src.large2x;
       });
+    });
+
+    const products = await db.collection("items").find({}).limit(5).toArray();
+    const productsProcessed = JSON.parse(JSON.stringify(products));
+    // send fetch request to pexels api to get image url
+    for (let i = 0; i < productsProcessed.length; i++) {
+      const name = productsProcessed[i].name;
+      await fetch(`https://api.pexels.com/v1/search?query=${name}&per_page=1`, {
+        headers: {
+          Authorization: `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }).then((response) => {
+        response.json().then((data) => {
+          console.log(data);
+          if (data.photos[0].src.large2x !== undefined) {
+            productsProcessed[i].image_url = data.photos[0].src.large2x;
+          } else {
+            productsProcessed[i].image_url = "api placeholder";
+          }
+        });
+      });
+    }
     return {
-      props: { bestSeller: bestSellerProduct },
+      props: {
+        products: productsProcessed,
+        bestSeller: bestSellerProduct,
+      },
     };
   } catch (err) {
-    console.log(err);
     return {
       redirect: {
         destination: "/",
         statusCode: 307,
-      }
-    }
+      },
+    };
   }
 }
 
