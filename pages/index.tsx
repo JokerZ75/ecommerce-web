@@ -42,51 +42,19 @@ const Home = ({ bestSeller, products }: any) => {
 export async function getStaticProps() {
   try {
     const client = await clientPromise;
-    const db = client.db("grocery");
+    const db = client.db("store_items");
 
     const bestSeller = await db
-      .collection("items")
+      .collection("catologue")
       .find({})
       .limit(1)
-      .skip(randomInt(0, 10000))
+      .skip(randomInt(0, 20))
       .toArray();
 
     const bestSellerProduct = JSON.parse(JSON.stringify(bestSeller[0]));
-    const name = bestSellerProduct.name;
-    await fetch(`https://api.pexels.com/v1/search?query=${name}&per_page=1`, {
-      headers: {
-        Authorization: `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }).then((response) => {
-      response.json().then((data) => {
-        bestSellerProduct.image_url = data.photos[0].src.large2x;
-      });
-    });
-
-    const products = await db.collection("items").find({}).limit(5).toArray();
+    const products = await db.collection("catologue").find({}).limit(15).toArray();
     const productsProcessed = JSON.parse(JSON.stringify(products));
-    // send fetch request to pexels api to get image url
-    for (let i = 0; i < productsProcessed.length; i++) {
-      const name = productsProcessed[i].name;
-      await fetch(`https://api.pexels.com/v1/search?query=${name}&per_page=1`, {
-        headers: {
-          Authorization: `6v5KRckua0zzQinmrYQewSGDwY5Hgag8AzN2d6NDm91pZxHSqL0pc8Xv`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }).then((response) => {
-        response.json().then((data) => {
-          console.log(data);
-          if (data.photos[0].src.large2x !== undefined) {
-            productsProcessed[i].image_url = data.photos[0].src.large2x;
-          } else {
-            productsProcessed[i].image_url = "api placeholder";
-          }
-        });
-      });
-    }
+    
     return {
       props: {
         products: productsProcessed,

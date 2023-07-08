@@ -42,7 +42,7 @@ const HeroBanner = (product: Product) => {
         <img
           src={product.image_url}
           alt="HeroBanner image"
-          className="h-full w-full object-cover  float-right "
+          className="h-[100%] w-[90%] object-cover   float-right "
         />
       </div>
     </div>

@@ -16,7 +16,7 @@ const Product = (product: ProductInterface) => {
     <div>
       {product.name}
       {product.image_url}
-      {/* <img src={product.image_url} alt="" /> */}
+      <img src={product.image_url} alt="" />
     </div>
   );
 };
