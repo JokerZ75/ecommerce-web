@@ -2,9 +2,13 @@ import React from "react";
 import { FooterBanner, HeroBanner, Product } from "../components";
 import clientPromise from "../lib/mongodb";
 import { randomInt } from "crypto";
-import product from "./product";
-import { useMemo, useEffect } from "react";
-import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronCircleRight,
+  faChevronCircleLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import { icon } from "@fortawesome/fontawesome-svg-core";
+import { useEffect, useState } from "react";
 
 interface ProductInterface {
   brand: string;
@@ -18,20 +22,56 @@ interface ProductInterface {
 }
 
 const Home = ({ bestSeller, products }: any) => {
+  const [scroll, setScroll] = useState("0");
+  useEffect(() => {
+    const updateScroll = async () => {
+      const productContainer = await document.querySelector<HTMLElement>(
+        ".min-w-fit"
+      );
+      if (productContainer) {
+        productContainer.style.transform = `translateX(${scroll}px)`;
+      }
+
+    };
+    updateScroll();
+  }, [scroll]);
+
   return (
     <>
-      <main className="h-screen">
+      <main className="h-screen overflow-x-hidden">
         <HeroBanner {...bestSeller} />
-        <div className="text-4xl text-cyan-700 font-extrabold m-12 mt-8 grid justify-center">
+        <div className="text-4xl text-cyan-700 font-extrabold m-12 mb-4 mt-8 grid justify-center">
           <h2 className="">Best Selling Products</h2>
           <p className="text-cyan-600 font-normal opacity-75 text-lg justify-self-center">
             All the of the best
           </p>
         </div>
-        <div className="grid justify-center">
-          {products.map((product: ProductInterface) => (
-            <Product {...product} key={product._id} />
-          ))}
+        <div>
+          <div className="absolute h-[350px] left-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out ">
+            <FontAwesomeIcon
+              className="text-6xl text-cyan-700 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
+              icon={faChevronCircleLeft}
+              onClick={() => {
+                setScroll((scroll) => (parseInt(scroll) + 250).toString());
+              }}
+            />
+          </div>
+          <div
+            className="absolute h-[350px] right-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
+            onClick={() => {
+              setScroll((scroll) => (parseInt(scroll) - 250).toString());
+            }}
+          >
+            <FontAwesomeIcon
+              className="text-6xl text-cyan-700 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
+              icon={faChevronCircleRight}
+            />
+          </div>
+          <div className="flex flex-row min-w-fit overflow-hidden transition duration-500 ease-in-out">
+            {products.map((product: ProductInterface) => (
+              <Product {...product} key={product._id} />
+            ))}
+          </div>
         </div>
       </main>
       <FooterBanner />
@@ -52,9 +92,13 @@ export async function getStaticProps() {
       .toArray();
 
     const bestSellerProduct = JSON.parse(JSON.stringify(bestSeller[0]));
-    const products = await db.collection("catologue").find({}).limit(15).toArray();
+    const products = await db
+      .collection("catologue")
+      .find({})
+      .limit(15)
+      .toArray();
     const productsProcessed = JSON.parse(JSON.stringify(products));
-    
+
     return {
       props: {
         products: productsProcessed,
