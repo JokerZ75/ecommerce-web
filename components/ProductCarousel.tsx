@@ -1,114 +1,125 @@
-import { faChevronCircleLeft, faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronCircleLeft,
+  faChevronCircleRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Product } from "../components";
+import { useIntersection } from "@mantine/hooks";
 
 interface ProductInterface {
-    brand: string;
-    format: string;
-    tags: string[];
-    name: string;
-    image_url: string;
-    category: string;
-    price: number;
-    _id: number;
+  brand: string;
+  format: string;
+  tags: string[];
+  name: string;
+  image_url: string;
+  category: string;
+  price: number;
+  _id: number;
+}
+
+const ProductCarousel = ({ items }: any) => {
+  const [scroll, setScroll] = useState("0");
+  const scrollDistance = 600;
+
+  const lastProductRef = useRef<HTMLDivElement>(null);
+  const { ref, entry } = useIntersection({
+    root: lastProductRef.current,
+    threshold: 0.5,
+  });
+
+  if (entry?.isIntersecting) {
+    const rightArrow = document.querySelector<HTMLElement>("#right-arrow");
+    if (rightArrow) {
+      rightArrow.style.display = "none";
+    }
   }
 
-const ProductCarousel = ( {items}:any) => {
-    const [scroll, setScroll] = useState("0");
-    useEffect(() => {
-      const effect = async () => {
-        const updateScroll = async () => {
-          const productContainer = await document.querySelector<HTMLElement>(
-            ".min-w-fit"
-          );
-          if (productContainer) {
-            productContainer.style.transform = `translateX(${scroll}px)`;
-          }
-        };
-        await updateScroll();
-  
-        const productContainer = await document.querySelector<HTMLElement>(
-          ".min-w-fit"
-        );
-        const scrollWidth = await productContainer?.scrollWidth;
-        if (scrollWidth) {
-          const leftArrow = await document.getElementById("left-arrow");
-          const rightArrow = await document.getElementById("right-arrow");
-          if (leftArrow && rightArrow) {
-            if (scroll == "0") {
-              leftArrow.style.display = "none";
-            }
-            if (parseInt(scroll) < 0) {
-                leftArrow.style.display = "block";
-            }
-            if (parseInt(scroll) - 1750 <= -scrollWidth) {
-              rightArrow.style.display = "none";
-            }
-  
-            if (parseInt(scroll) - 1750 > -scrollWidth) {
-              rightArrow.style.display = "block";
-            }
-          }
-        }
-      };
-      effect();
-    }, [scroll]);
-  
-    const handleClick = async (type: string) => {
+  useEffect(() => {
+    const updateScroll = async () => {
       const productContainer = await document.querySelector<HTMLElement>(
         ".min-w-fit"
       );
-      const scrollWidth = await productContainer?.scrollWidth;
-      if (scrollWidth) {
-        if (type == "-") {
-          if (parseInt(scroll) + 1750 >= 0) {
-            setScroll((scroll) => (0).toString());
-          } else {
-            setScroll((scroll) => (parseInt(scroll) + 1750).toString());
-          }
-        } else if (type == "+") {
-          if (parseInt(scroll) - 1750 <= -scrollWidth) {
-          } else {
-            setScroll((scroll) => (parseInt(scroll) - 1750).toString());
-          }
+      const leftArrow = await document.querySelector<HTMLElement>(
+        "#left-arrow"
+      );
+      if (productContainer) {
+        productContainer.style.transform = `translateX(${scroll}px)`;
+      }
+      if (leftArrow) {
+        if (scroll == "0") {
+          leftArrow.style.display = "none";
+        } else {
+          leftArrow.style.display = "block";
         }
       }
     };
+    updateScroll();
+  }, [scroll]);
 
-    return (
-        <div>
-        <div className="absolute h-[350px] left-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out ">
-          <FontAwesomeIcon
-            id="left-arrow"
-            className="text-6xl text-cyan-700 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
-            icon={faChevronCircleLeft}
-            onClick={() => {
-              handleClick("-");
-            }}
-          />
-        </div>
-        <div
-          className="absolute h-[350px] right-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
-          onClick={() => {
-            handleClick("+");
-          }}
-        >
-          <FontAwesomeIcon
-            id="right-arrow"
-            className="text-6xl text-cyan-700 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
-            icon={faChevronCircleRight}
-          />
-        </div>
-        <div className="flex flex-row min-w-fit overflow-hidden transition duration-500 ease-in-out">
-          {items.map((product: ProductInterface) => (
-            <Product {...product} key={product._id} />
-          ))}
-        </div>
+  const handleClick = async (type: string) => {
+    const productContainer = await document.querySelector<HTMLElement>(
+      ".min-w-fit"
+    );
+    const rightArrow = await document.querySelector<HTMLElement>("#right-arrow");
+    const scrollWidth = await productContainer?.scrollWidth;
+    if (scrollWidth) {
+      if (type == "-") {
+        if (rightArrow) {rightArrow.style.display = "block";}
+        if (parseInt(scroll) + scrollDistance >= 0) {
+          setScroll((scroll) => (0).toString());
+        } else {
+          setScroll((scroll) => (parseInt(scroll) + scrollDistance).toString());
+        }
+      } else if (type == "+") {
+        if (parseInt(scroll) - scrollDistance + 150 <= -scrollWidth) {
+        } else {
+          setScroll((scroll) => (parseInt(scroll) - scrollDistance).toString());
+        }
+      }
+    }
+  };
+
+  return (
+    <div>
+      <div
+        className="absolute h-[350px] left-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
+        onClick={() => {
+          handleClick("-");
+        }}
+      >
+        <FontAwesomeIcon
+          id="left-arrow"
+          className="text-6xl text-cyan-700 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
+          icon={faChevronCircleLeft}
+        />
       </div>
-    )
-    
-
-}
+      <div
+        className="absolute h-[350px] right-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
+        onClick={() => {
+          handleClick("+");
+        }}
+      >
+        <FontAwesomeIcon
+          id="right-arrow"
+          className="text-6xl text-cyan-700 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
+          icon={faChevronCircleRight}
+        />
+      </div>
+      <div className="flex flex-row min-w-fit overflow-hidden transition duration-500 ease-in-out">
+        {items.map((product: ProductInterface, index: any) => {
+          if (items.length - 1 == index) {
+            return (
+              <div key={product._id} ref={ref}>
+                <Product {...product} />
+              </div>
+            );
+          }
+          return <Product key={product._id} {...product} />;
+        })}
+      </div>
+    </div>
+  );
+};
 
 export default ProductCarousel;
