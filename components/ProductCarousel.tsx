@@ -90,7 +90,7 @@ const ProductCarousel = ({ items }: any) => {
       >
         <FontAwesomeIcon
           id="left-arrow"
-          className="text-6xl text-cyan-700 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
+          className="text-6xl text-red-300 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
           icon={faChevronCircleLeft}
         />
       </div>
@@ -102,7 +102,7 @@ const ProductCarousel = ({ items }: any) => {
       >
         <FontAwesomeIcon
           id="right-arrow"
-          className="text-6xl text-cyan-700 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
+          className="text-6xl text-red-300 font-extrabold m-12 mb-4 mt-[70%] grid justify-center"
           icon={faChevronCircleRight}
         />
       </div>
