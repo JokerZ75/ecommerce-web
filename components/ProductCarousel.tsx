@@ -85,7 +85,7 @@ const ProductCarousel : FunctionComponent<ProductCarouselProps> = ( { items } ) 
   };
 
   return (
-    <div>
+    <div className="mb-10">
       <div
         className="absolute h-[350px] left-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
         onClick={() => {
