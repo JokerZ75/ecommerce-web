@@ -25,7 +25,6 @@ interface HomeProps {
 const Home: FunctionComponent<HomeProps> = ({ bestSeller, products, saleProduct }) => {
   return (
     <>
-      <main className="h-screen overflow-x-hidden">
         <HeroBanner {...bestSeller} />
         <div className="text-4xl text-cyan-700 font-extrabold m-12 mb-4 mt-8 grid justify-center">
           <h2 className="">Best Selling Products</h2>
@@ -33,9 +32,8 @@ const Home: FunctionComponent<HomeProps> = ({ bestSeller, products, saleProduct 
             All the of the best
           </p>
         </div>
-        <ProductCarousel items={products} />
-      </main>
-      <FooterBanner saleProduct={saleProduct} />
+        <ProductCarousel items={products} />  
+        <FooterBanner saleProduct={saleProduct} />
     </>
   );
 };

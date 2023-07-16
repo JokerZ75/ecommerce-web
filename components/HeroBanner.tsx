@@ -16,7 +16,7 @@ interface Product {
 }
 const HeroBanner = (product: Product) => {
   return (
-    <div className="bg-slate-300 rounded-xl h-1/2 max-h-1/2 shadow-lg shadow-black relative flex  ">
+    <div className="bg-slate-300 rounded-xl h-1/2 max-h-[65vh] shadow-lg shadow-black relative flex  ">
       <div className="flex flex-col p-10 pb-5 pr-8 ">
         <p className="text-2xl">{product.brand}</p>
         <h3 className="text-5xl font-bold">{product.name}</h3>
