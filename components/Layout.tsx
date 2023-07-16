@@ -17,7 +17,7 @@ const Layout:FunctionComponent<LayoutProps> = ( {children} ) => {
       <header>
         <Navbar />
       </header>
-      <main className='p-3'>
+      <main className='p-6'>
         {children}
       </main>
       <footer>
