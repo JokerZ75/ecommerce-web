@@ -3,7 +3,7 @@ import {
   faChevronCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Product } from "../components";
 import { useIntersection } from "@mantine/hooks";
 
@@ -18,9 +18,13 @@ interface ProductInterface {
   _id: number;
 }
 
-const ProductCarousel = ({ items }: any) => {
+interface ProductCarouselProps {
+  items: ProductInterface[];
+}
+
+const ProductCarousel : FunctionComponent<ProductCarouselProps> = ( { items } ) => {
   const [scroll, setScroll] = useState("0");
-  const scrollDistance = 600;
+  const scrollDistance = 750;
 
   const lastProductRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
@@ -95,7 +99,7 @@ const ProductCarousel = ({ items }: any) => {
         />
       </div>
       <div
-        className="absolute h-[350px] right-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
+        className="absolute h-[350px] right-0 z-10 hover:scale-100 hover:brightness-200 transition duration-200 ease-in-out"
         onClick={() => {
           handleClick("+");
         }}
@@ -107,7 +111,7 @@ const ProductCarousel = ({ items }: any) => {
         />
       </div>
       <div className="flex flex-row min-w-fit overflow-hidden transition duration-500 ease-in-out">
-        {items.map((product: ProductInterface, index: any) => {
+        {items.map((product: ProductInterface, index: number) => {
           if (items.length - 1 == index) {
             return (
               <div key={product._id} ref={ref}>

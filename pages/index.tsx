@@ -1,10 +1,30 @@
 import React from "react";
-import { FooterBanner, HeroBanner, Product, ProductCarousel } from "../components";
+import {
+  FooterBanner,
+  HeroBanner,
+  ProductCarousel,
+} from "../components";
 import clientPromise from "../lib/mongodb";
 import { randomInt } from "crypto";
+import { FunctionComponent } from "react";
 
-const Home = ({ bestSeller, products }: any) => {
+interface ProductInterface {
+  brand: string;
+  format: string;
+  tags: string[];
+  name: string;
+  image_url: string;
+  category: string;
+  price: number;
+  _id: number;
+}
 
+interface HomeProps {
+  bestSeller: ProductInterface;
+  products: ProductInterface[];
+}
+
+const Home: FunctionComponent<HomeProps> = ({ bestSeller, products }) => {
   return (
     <>
       <main className="h-screen overflow-x-hidden">

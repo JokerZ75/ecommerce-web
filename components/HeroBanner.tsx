@@ -23,7 +23,7 @@ const HeroBanner = (product: Product) => {
         <div>
           <Link href={`/product/${product._id}`}>
             <button
-              className="bg-red-600 py-6 px-14 rounded-xl text-white text-3xl font-bold mt-10"
+              className="bg-red-600 py-6 px-14 rounded-xl text-white text-3xl font-bold mt-10 shadow-md shadow-black hover:scale-110 hover:shadow-xl hover:shadow-black transition duration-300  "
               type="button"
             >
               £{product.price}
