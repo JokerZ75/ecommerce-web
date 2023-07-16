@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  FooterBanner,
-  HeroBanner,
-  ProductCarousel,
-} from "../components";
+import { FooterBanner, HeroBanner, ProductCarousel } from "../components";
 import clientPromise from "../lib/mongodb";
 import { randomInt } from "crypto";
 import { FunctionComponent } from "react";
@@ -16,15 +12,17 @@ interface ProductInterface {
   image_url: string;
   category: string;
   price: number;
+  price_special: number;
   _id: number;
 }
 
 interface HomeProps {
   bestSeller: ProductInterface;
+  saleProduct: ProductInterface;
   products: ProductInterface[];
 }
 
-const Home: FunctionComponent<HomeProps> = ({ bestSeller, products }) => {
+const Home: FunctionComponent<HomeProps> = ({ bestSeller, products, saleProduct }) => {
   return (
     <>
       <main className="h-screen overflow-x-hidden">
@@ -37,7 +35,7 @@ const Home: FunctionComponent<HomeProps> = ({ bestSeller, products }) => {
         </div>
         <ProductCarousel items={products} />
       </main>
-      <FooterBanner />
+      <FooterBanner saleProduct={saleProduct} />
     </>
   );
 };
@@ -49,12 +47,21 @@ export async function getStaticProps() {
 
     const bestSeller = await db
       .collection("catologue")
-      .find({})
+      .find({price: {$gt: 100}})
       .limit(1)
       .skip(randomInt(0, 20))
       .toArray();
 
     const bestSellerProduct = JSON.parse(JSON.stringify(bestSeller[0]));
+
+    const saleProduct = await db
+      .collection("catologue")
+      .find({sale_item: "true"})
+      .limit(1)
+      .toArray();
+
+    const saleProductProcessed = JSON.parse(JSON.stringify(saleProduct[0]));
+
     const products = await db
       .collection("catologue")
       .find({})
@@ -66,6 +73,7 @@ export async function getStaticProps() {
       props: {
         products: productsProcessed,
         bestSeller: bestSellerProduct,
+        saleProduct: saleProductProcessed,
       },
     };
   } catch (err) {

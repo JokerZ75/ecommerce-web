@@ -16,7 +16,7 @@ interface Product {
 }
 const HeroBanner = (product: Product) => {
   return (
-    <div className="w-screen bg-slate-300 h-1/2 max-h-1/2 relative flex  ">
+    <div className="bg-slate-300 rounded-xl h-1/2 max-h-1/2 shadow-lg shadow-black relative flex  ">
       <div className="flex flex-col p-10 pb-5 pr-8 ">
         <p className="text-2xl">{product.brand}</p>
         <h3 className="text-5xl font-bold">{product.name}</h3>
@@ -38,11 +38,11 @@ const HeroBanner = (product: Product) => {
           </p>
         </div>
       </div>
-      <div className="flex-grow ml-2">
+      <div className="flex-grow ml-2 ">
         <img
           src={product.image_url}
           alt="HeroBanner image"
-          className="h-[100%] w-[90%] object-cover   float-right "
+          className="h-[100%] w-[100%] rounded-r-xl object-cover"
         />
       </div>
     </div>
