@@ -33,7 +33,7 @@ const Home: FunctionComponent<HomeProps> = ({ bestSeller, products, saleProduct 
           </p>
         </div>
         <ProductCarousel items={products} />  
-        <FooterBanner saleProduct={saleProduct} />
+        <FooterBanner {...saleProduct} />
     </>
   );
 };

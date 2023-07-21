@@ -24,7 +24,7 @@ const Footer = () => {
           </div>
           <div className="flex flex-col">
             <h3 className="text-4xl font-bold text-cyan-700">Socials</h3>
-            <div className="flex flex-row justify-center mt-4">
+            <div className="flex flex-row justify-center pl-3 mt-4">
               <Link href={"https://en-gb.facebook.com/"} target="_blank">
                 <FontAwesomeIcon
                   icon={faFacebook}

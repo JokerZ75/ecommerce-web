@@ -1,6 +1,8 @@
+
+
 import React, { FunctionComponent } from "react";
 import Link from "next/link";
-
+import product from "@/pages/product";
 interface ProductInterface {
   brand: string;
   format: string;
@@ -12,13 +14,10 @@ interface ProductInterface {
   price_special: number;
   _id: number;
 }
-interface FooterBannerProps {
-  saleProduct: ProductInterface;
-}
 
-const FooterBanner: FunctionComponent<FooterBannerProps> = ({
-  saleProduct,
-}) => {
+const FooterBanner = (
+  saleProduct : ProductInterface
+) => {
   return (
     <>
       <div>
@@ -30,6 +29,9 @@ const FooterBanner: FunctionComponent<FooterBannerProps> = ({
               <h3 className="text-5xl font-bold">{saleProduct.name}</h3>
             </div>
             <div>
+              <p className="text-red-600 font-bold text-3xl">Reduced from £{saleProduct.price}</p>
+              {}
+              <p className="text-red-700 font-bold text-3xl">That's {Math.ceil((Math.floor((1 - (saleProduct.price_special / saleProduct.price)) * 100) / 10) * 10)}% Off</p>
               <Link href={`/product/${saleProduct._id}`}>
                 <button
                   className="bg-red-600 py-6 px-14 rounded-xl text-white text-3xl font-bold mt-10 shadow-md shadow-black hover:scale-110 hover:shadow-xl hover:shadow-black transition duration-300  "

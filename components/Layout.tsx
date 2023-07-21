@@ -14,10 +14,10 @@ const Layout:FunctionComponent<LayoutProps> = ( {children} ) => {
       <Head>
         <title>DHughes Store</title>
       </Head>
-      <header>
+      <header className='sticky top-0 z-20'>
         <Navbar />
       </header>
-      <main className='p-6'>
+      <main className='p-6 relative'>
         {children}
       </main>
       <footer>
