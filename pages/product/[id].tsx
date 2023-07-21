@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import clientPromise from "../../lib/mongodb";
 import { ObjectId } from "mongodb";
 import { GetStaticProps, GetStaticPaths } from 'next';
-import product from '../product';
 
 interface ProductInterface {
   brand: string;
