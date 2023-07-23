@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 import { Product } from "../components";
 import { useIntersection } from "@mantine/hooks";
+import { machine } from "os";
+import { parse } from "path";
 
 interface ProductInterface {
   brand: string;
@@ -37,7 +39,7 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
   const lastProductRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: lastProductRef.current,
-    threshold: 0.4,
+    threshold: 0,
   });
 
   if (entry?.isIntersecting) {
@@ -54,11 +56,12 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
       if (type == "autoScroll") {
         if (leftArrow) leftArrow.style.display = "none";
         if (rightArrowRef.current) rightArrowRef.current.style.display = "none";
-      }
-      if (entry?.isIntersecting && type == "autoScroll") {
-        setTimeout(() => {
-          setScroll((scroll) => (0).toString());
-        }, 500);
+        if (productContainer) {
+          const scrollWidth = productContainer.childNodes.length * 150;
+          if (parseInt(scroll) - 150 <= -scrollWidth) {
+            setScroll((scroll) => (0).toString());
+          } 
+        }
       }
       if (productContainer) {
         productContainer.style.transform = `translateX(${scroll}px)`;
