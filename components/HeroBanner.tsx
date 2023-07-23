@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Product from "./Product";
+import { useEffect } from 'react';
 
 // Typescript product interface
 interface Product {
@@ -15,11 +16,19 @@ interface Product {
   _id: number;
 }
 const HeroBanner = (product: Product) => {
+
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (ref.current?.innerText == "Error"){
+      window.location.reload();
+    }
+  },[product]);
+
   return (
     <div className="bg-slate-300 rounded-xl h-1/2 max-h-[65vh] shadow-lg shadow-black relative flex  ">
       <div className="flex flex-col p-10 pb-5 pr-8 ">
         <p className="text-2xl">{product?.brand}</p>
-        <h3 className="text-5xl font-bold">{product.name}</h3>
+        <h3 ref={ref} className="text-5xl font-bold">{product.name}</h3>
         <div>
           <Link href={`/product/${product?._id}`}>
             <button

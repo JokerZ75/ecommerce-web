@@ -3,7 +3,7 @@ import {
   faChevronCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 import { Product } from "../components";
 import { useIntersection } from "@mantine/hooks";
 
@@ -20,11 +20,19 @@ interface ProductInterface {
 
 interface ProductCarouselProps {
   items: ProductInterface[];
+  type?: "autoScroll" | null;
 }
 
-const ProductCarousel : FunctionComponent<ProductCarouselProps> = ( { items } ) => {
+const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
+  items,
+  type,
+}) => {
   const [scroll, setScroll] = useState("0");
   const scrollDistance = 750;
+
+  const leftArrowRef = useRef<HTMLDivElement>(null);
+  const rightArrowRef = useRef<HTMLDivElement>(null);
+  const productContainerRef = useRef<HTMLDivElement>(null);
 
   const lastProductRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
@@ -33,7 +41,7 @@ const ProductCarousel : FunctionComponent<ProductCarouselProps> = ( { items } ) 
   });
 
   if (entry?.isIntersecting) {
-    const rightArrow = document.querySelector<HTMLElement>("#right-arrow");
+    const rightArrow = rightArrowRef.current;
     if (rightArrow) {
       rightArrow.style.display = "none";
     }
@@ -41,35 +49,51 @@ const ProductCarousel : FunctionComponent<ProductCarouselProps> = ( { items } ) 
 
   useEffect(() => {
     const updateScroll = async () => {
-      const productContainer = await document.querySelector<HTMLElement>(
-        ".min-w-fit"
-      );
-      const leftArrow = await document.querySelector<HTMLElement>(
-        "#left-arrow"
-      );
+      const productContainer = productContainerRef.current;
+      const leftArrow = leftArrowRef.current;
+      if (type == "autoScroll") {
+        if (leftArrow) leftArrow.style.display = "none";
+        if (rightArrowRef.current) rightArrowRef.current.style.display = "none";
+      }
+      if (entry?.isIntersecting && type == "autoScroll") {
+        setScroll((scroll) => (0).toString());
+      }
       if (productContainer) {
         productContainer.style.transform = `translateX(${scroll}px)`;
       }
       if (leftArrow) {
         if (scroll == "0") {
           leftArrow.style.display = "none";
-        } else {
+        } else if(type != "autoScroll") {
           leftArrow.style.display = "block";
         }
       }
     };
     updateScroll();
-  }, [scroll]);
+  }, [scroll,]);
+
+  useMemo(() => {
+    if (type == "autoScroll") {
+      const rightArrow = rightArrowRef.current;
+      const leftArrow = leftArrowRef.current;
+      const auto = async () => {
+        setInterval(() => {
+          setScroll((scroll) => (parseInt(scroll) - 150).toString());
+        }, 1500);
+      };
+      auto();
+    }
+  }, []);
 
   const handleClick = async (type: string) => {
-    const productContainer = await document.querySelector<HTMLElement>(
-      ".min-w-fit"
-    );
-    const rightArrow = await document.querySelector<HTMLElement>("#right-arrow");
+    const productContainer = productContainerRef.current;
+    const rightArrow = rightArrowRef.current;
     const scrollWidth = await productContainer?.scrollWidth;
     if (scrollWidth) {
       if (type == "-") {
-        if (rightArrow) {rightArrow.style.display = "block";}
+        if (rightArrow) {
+          rightArrow.style.display = "block";
+        }
         if (parseInt(scroll) + scrollDistance >= 0) {
           setScroll((scroll) => (0).toString());
         } else {
@@ -87,6 +111,7 @@ const ProductCarousel : FunctionComponent<ProductCarouselProps> = ( { items } ) 
   return (
     <div className="mb-10 w-[100%] overflow-hidden">
       <div
+        ref={leftArrowRef}
         className="absolute h-[350px] left-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
         onClick={() => {
           handleClick("-");
@@ -99,6 +124,7 @@ const ProductCarousel : FunctionComponent<ProductCarouselProps> = ( { items } ) 
         />
       </div>
       <div
+        ref={rightArrowRef}
         className="absolute h-[350px] right-0 z-10 hover:scale-100 hover:brightness-200 transition duration-200 ease-in-out"
         onClick={() => {
           handleClick("+");
@@ -110,7 +136,7 @@ const ProductCarousel : FunctionComponent<ProductCarouselProps> = ( { items } ) 
           icon={faChevronCircleRight}
         />
       </div>
-      <div className="flex flex-row min-w-fit overflow-hidden transition duration-500 ease-in-out">
+      <div ref={productContainerRef} className="flex flex-row min-w-fit overflow-hidden transition duration-500 ease-in-out">
         {items.map((product: ProductInterface, index: number) => {
           if (items.length - 1 == index) {
             return (

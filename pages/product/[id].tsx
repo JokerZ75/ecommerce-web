@@ -8,6 +8,7 @@ import {
   AiFillStar,
   AiOutlineStar,
 } from "react-icons/ai";
+import ProductCarousel from "@/components/ProductCarousel";
 
 interface ProductInterface {
   brand: string;
@@ -22,12 +23,13 @@ interface ProductInterface {
 
 interface ProductDetails {
   product: ProductInterface;
+  suggestedProducts: ProductInterface[];
 }
 
-const ProductDetails: FC<ProductDetails> = ({ product }) => {
+const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
   return (
     <>
-      <div className="mx-32 flex flex-row" id="product-detail-container">
+      <div className="mx-32 flex flex-row" id="product-detail-wrapper">
         <div id="product-image">
             <img
               className="w-auto h-[600px] min-w-[200px] aspect-square object-contain"
@@ -89,6 +91,10 @@ const ProductDetails: FC<ProductDetails> = ({ product }) => {
           </div>
         </div>
       </div>
+      <div id="may-like-wrapper">
+        <h2 className=" text-center text-4xl font-bold text-cyan-700 mb-8">You may also like:</h2>
+        <ProductCarousel items={suggestedProducts} type="autoScroll"></ProductCarousel>
+      </div>
     </>
   );
 };
@@ -120,11 +126,19 @@ export const getStaticProps: GetStaticProps = async (context) => {
       .limit(1)
       .toArray();
 
-    const productProcessed = JSON.parse(JSON.stringify(product[0]));
+    const productProcessed : ProductInterface = JSON.parse(JSON.stringify(product[0]));
 
+    const suggestedProducts = await db
+      .collection("catologue")
+      .find({ category: productProcessed.category })
+      .limit(10)
+      .toArray();
+
+    const suggestedProductsProccessed = JSON.parse(JSON.stringify(suggestedProducts));
     return {
       props: {
         product: productProcessed,
+        suggestedProducts: suggestedProductsProccessed,
       },
     };
   } catch (err: any) {
