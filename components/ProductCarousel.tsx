@@ -37,7 +37,7 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
   const lastProductRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: lastProductRef.current,
-    threshold: 0.5,
+    threshold: 0.4,
   });
 
   if (entry?.isIntersecting) {
@@ -56,7 +56,9 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
         if (rightArrowRef.current) rightArrowRef.current.style.display = "none";
       }
       if (entry?.isIntersecting && type == "autoScroll") {
-        setScroll((scroll) => (0).toString());
+        setTimeout(() => {
+          setScroll((scroll) => (0).toString());
+        }, 500);
       }
       if (productContainer) {
         productContainer.style.transform = `translateX(${scroll}px)`;
@@ -64,18 +66,16 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
       if (leftArrow) {
         if (scroll == "0") {
           leftArrow.style.display = "none";
-        } else if(type != "autoScroll") {
+        } else if (type != "autoScroll") {
           leftArrow.style.display = "block";
         }
       }
     };
     updateScroll();
-  }, [scroll,]);
+  }, [scroll]);
 
   useMemo(() => {
     if (type == "autoScroll") {
-      const rightArrow = rightArrowRef.current;
-      const leftArrow = leftArrowRef.current;
       const auto = async () => {
         setInterval(() => {
           setScroll((scroll) => (parseInt(scroll) - 150).toString());
@@ -136,7 +136,10 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
           icon={faChevronCircleRight}
         />
       </div>
-      <div ref={productContainerRef} className="flex flex-row min-w-fit overflow-hidden transition duration-500 ease-in-out">
+      <div
+        ref={productContainerRef}
+        className="flex flex-row min-w-fit overflow-hidden transition duration-500 ease-in-out"
+      >
         {items.map((product: ProductInterface, index: number) => {
           if (items.length - 1 == index) {
             return (
