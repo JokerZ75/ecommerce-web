@@ -22,18 +22,22 @@ interface HomeProps {
   products: ProductInterface[];
 }
 
-const Home: FunctionComponent<HomeProps> = ({ bestSeller, products, saleProduct }) => {
+const Home: FunctionComponent<HomeProps> = ({
+  bestSeller,
+  products,
+  saleProduct,
+}) => {
   return (
     <>
-        <HeroBanner {...bestSeller} />
-        <div className="text-4xl text-cyan-700 font-extrabold m-12 mb-4 mt-8 grid justify-center">
-          <h2 className="">Best Selling Products</h2>
-          <p className="text-cyan-600 font-normal opacity-75 text-lg justify-self-center">
-            All the of the best
-          </p>
-        </div>
-        <ProductCarousel items={products} />  
-        <FooterBanner {...saleProduct} />
+      <HeroBanner {...bestSeller} />
+      <div className="text-4xl text-cyan-700 font-extrabold m-12 mb-4 mt-8 grid justify-center">
+        <h2 className="">Best Selling Products</h2>
+        <p className="text-cyan-600 font-normal opacity-75 text-lg justify-self-center">
+          All the of the best
+        </p>
+      </div>
+      <ProductCarousel items={products} />
+      <FooterBanner {...saleProduct} />
     </>
   );
 };
@@ -45,7 +49,7 @@ export async function getStaticProps() {
 
     const bestSeller = await db
       .collection("catologue")
-      .find({price: {$gt: 100}})
+      .find({ price: { $gt: 100 } })
       .limit(1)
       .skip(randomInt(0, 20))
       .toArray();
@@ -54,7 +58,7 @@ export async function getStaticProps() {
 
     const saleProduct = await db
       .collection("catologue")
-      .find({sale_item: "true"})
+      .find({ sale_item: "true" })
       .limit(1)
       .toArray();
 
@@ -74,11 +78,40 @@ export async function getStaticProps() {
         saleProduct: saleProductProcessed,
       },
     };
-  } catch (err) {
+  } catch (err: any) {
     return {
-      redirect: {
-        destination: "/",
-        statusCode: 307,
+      props: {
+        err: err.message,
+        bestSeller: {
+          brand: "Error",
+          format: "Error",
+          tags: ["Error"],
+          name: "Error",
+          image_url: "Error",
+          category: "Error",
+          price: 0,
+        },
+        saleProduct: {
+          brand: "Error",
+          format: "Error",
+          tags: ["Error"],
+          name: "Error",
+          image_url: "Error",
+          category: "Error",
+          price: 0,
+        },
+        products: [
+          {
+            _id : 0,
+            brand: "Error",
+            format: "Error",
+            tags: ["Error"],
+            name: "Error",
+            image_url: "Error",
+            category: "Error",
+            price: 0,
+          }
+        ]
       },
     };
   }

@@ -1,6 +1,5 @@
 import { randomInt } from "crypto";
 import clientPromise from "../../../lib/mongodb";
-import product from '../../product';
 
 export default async function handler(req: any, res: any) {
   try {

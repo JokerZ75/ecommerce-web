@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import product from "../pages/product";
 interface ProductInterface {
   brand: string;
   format: string;
