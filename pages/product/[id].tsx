@@ -9,6 +9,7 @@ import {
   AiOutlineStar,
 } from "react-icons/ai";
 import ProductCarousel from "@/components/ProductCarousel";
+import { useStateContext } from "@/context/StateContext";
 
 interface ProductInterface {
   brand: string;
@@ -21,12 +22,22 @@ interface ProductInterface {
   _id: number;
 }
 
+interface cartItemsInterface extends ProductInterface {
+  quantity: number;
+}
+interface OnAddProduct {
+  product: cartItemsInterface;
+  quantity: number;
+}
+
 interface ProductDetails {
-  product: ProductInterface;
+  product: cartItemsInterface;
   suggestedProducts: ProductInterface[];
 }
 
 const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
+  const { qty, incQty, decQty, onAdd } = useStateContext();
+
   return (
     <>
       <div className="mx-32 flex flex-row" id="product-detail-wrapper">
@@ -64,13 +75,13 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
           <div id="product-quantity">
             <h3 className="text-2xl text-cyan-700 font-bold">Quantity:</h3>
             <p className="flex flex-row text-2xl py-2" id="quantity-desc">
-              <span className="py-4 px-8 outline outline-1 border cursor-pointer" id="minus" onClick={() => {}}>
+              <span className="py-4 px-8 outline outline-1 border cursor-pointer" id="minus" onClick={() => {decQty()}}>
                 <AiOutlineMinus />
               </span>
               <span className="py-4 px-6 outline outline-1 border" id="num" onClick={() => {}}>
-                0
+                {qty}
               </span>
-              <span className="py-4 px-8 outline outline-1 border cursor-pointer" id="plus" onClick={() => {}}>
+              <span className="py-4 px-8 outline outline-1 border cursor-pointer" id="plus" onClick={() => {incQty()}}>
                 <AiOutlinePlus />
               </span>
             </p>
@@ -78,7 +89,7 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
           <div className="mt-8 flex flex-col w-[45%] "id="product-buttons">
             <button
               className="outline outline-1 text-cyan-700 font-bold mb-4 px-10 py-2"
-              onClick={() => {}}
+              onClick={() => onAdd({ product, quantity: qty })}
             >
               Add to Cart
             </button>
