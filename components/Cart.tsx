@@ -9,6 +9,8 @@ import {
 import { TiTrash } from "react-icons/ti";
 import toast from "react-hot-toast";
 import { useStateContext } from "@/context/StateContext";
+import getStripe from "@/lib/getStripe";
+import { NextApiRequest } from "next";
 
 interface ProductInterface {
   brand: string;
@@ -26,9 +28,42 @@ interface CartItemsInterface extends ProductInterface {
 }
 
 const Cart = () => {
+  const HandleCheckout = async () => {
+    const stripe = await getStripe();
+
+    const response: Response = await fetch("/api/stripe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cartItems),
+    });
+
+    if (response.status === 500) return;
+
+    const data = await response.json();
+
+    toast.loading("Redirecting to Stripe...");
+    if (data.status === 401) {
+      toast.dismiss();
+      toast.error("Something went wrong, please try again later");
+      return;
+    } else {
+      await stripe.redirectToCheckout({
+        sessionId: data.id,
+      });
+    }
+  };
+
   const cartRef = useRef(null);
-  const { cartItems, cartTotal, totalQuantity, setShowCart, toggleCartItemQuantity, onRemove } =
-    useStateContext();
+  const {
+    cartItems,
+    cartTotal,
+    totalQuantity,
+    setShowCart,
+    toggleCartItemQuantity,
+    onRemove,
+  } = useStateContext();
 
   return (
     <div className="" ref={cartRef}>
@@ -76,7 +111,7 @@ const Cart = () => {
               </Link>
             </div>
           )}
-          <div id="productS-container" className="">
+          <div id="products-container" className="">
             {cartItems.length >= 1 &&
               cartItems.map((item: CartItemsInterface) => {
                 return (
@@ -111,7 +146,9 @@ const Cart = () => {
                           >
                             <span
                               className="py-3 px-3 outline outline-1 border cursor-pointer"
-                              onClick={() => {toggleCartItemQuantity(item._id, "dec")}}
+                              onClick={() => {
+                                toggleCartItemQuantity(item._id, "dec");
+                              }}
                             >
                               <AiOutlineMinus />
                             </span>
@@ -123,7 +160,9 @@ const Cart = () => {
                             </span>
                             <span
                               className="py-3 px-3 outline outline-1 border cursor-pointer"
-                              onClick={() => {toggleCartItemQuantity(item._id, "inc")}}
+                              onClick={() => {
+                                toggleCartItemQuantity(item._id, "inc");
+                              }}
                             >
                               <AiOutlinePlus />
                             </span>
@@ -156,12 +195,14 @@ const Cart = () => {
             <p className="text-2xl font-bold text-cyan-700">
               £{cartTotal.toFixed(2)}
             </p>
-          </div>{" "}
+          </div>
           <div id="buy-button">
             <button
               type="button"
               className="text-2xl font-bold text-white bg-cyan-700 hover:underline hover:scale-110 transition duration-300 ease-in-out w-full py-4 px-3 rounded my-3"
-              onClick={() => {}}
+              onClick={() => {
+                HandleCheckout();
+              }}
             >
               Pay With Stripe
             </button>
