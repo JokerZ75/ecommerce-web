@@ -10,14 +10,14 @@ interface LayoutProps {
 
 const Layout:FunctionComponent<LayoutProps> = ( {children} ) => {
   return (
-    <div className='overflow-x-hidden'>
+    <div className='relative'>
       <Head>
         <title>DHughes Store</title>
       </Head>
       <header className='sticky top-0 z-20'>
         <Navbar />
       </header>
-      <main className='p-6 relative'>
+      <main className=' p-6 relative'>
         {children}
       </main>
       <footer>

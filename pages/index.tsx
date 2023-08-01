@@ -31,7 +31,7 @@ const Home: FunctionComponent<HomeProps> = ({
     <>
       <HeroBanner {...bestSeller} />
       <div className="text-4xl text-cyan-700 font-extrabold m-12 mb-4 mt-8 grid justify-center">
-        <h2 className="">Best Selling Products</h2>
+        <h2 className="text-center">Best Selling Products</h2>
         <p className="text-cyan-600 font-normal opacity-75 text-lg justify-self-center">
           All the of the best
         </p>

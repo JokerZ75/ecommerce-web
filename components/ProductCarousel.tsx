@@ -29,8 +29,10 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
   items,
   type,
 }) => {
+  const hasWindow = typeof window !== "undefined";
+  const windowWidth = hasWindow ? window.innerWidth : 0;
   const [scroll, setScroll] = useState("0");
-  const scrollDistance = 750;
+  const scrollDistance = windowWidth > 768 ? 750 : 450;
 
   const leftArrowRef = useRef<HTMLDivElement>(null);
   const rightArrowRef = useRef<HTMLDivElement>(null);
@@ -60,7 +62,7 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
           const scrollWidth = productContainer.childNodes.length * 150;
           if (parseInt(scroll) - 150 <= -scrollWidth) {
             setScroll((scroll) => (0).toString());
-          } 
+          }
         }
       }
       if (productContainer) {
@@ -112,10 +114,10 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
   };
 
   return (
-    <div className="mb-10 w-[100%] overflow-hidden">
+    <div className="mb-4 md:mb-10 w-[100%] overflow-hidden">
       <div
         ref={leftArrowRef}
-        className="absolute h-[350px] left-0 z-10 hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
+        className="absolute h-[350px]  left-[-35px] md:left-0 z-10 hover:scale-110 hover:cursor-pointer hover:brightness-200 transition duration-200 ease-in-out"
         onClick={() => {
           handleClick("-");
         }}
@@ -128,7 +130,7 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
       </div>
       <div
         ref={rightArrowRef}
-        className="absolute h-[350px] right-0 z-10 hover:scale-100 hover:brightness-200 transition duration-200 ease-in-out"
+        className="absolute h-[350px] right-0 z-10 hover:cursor-pointer hover:scale-110 hover:brightness-200 transition duration-200 ease-in-out"
         onClick={() => {
           handleClick("+");
         }}
