@@ -8,7 +8,7 @@ const Navbar = () => {
   const { showCart, setShowCart, totalQuantity  } = useStateContext();
 
   return (
-    <div className="w-screen flex flex-row p-6 pr-12 pb-0">
+    <div className="w-screen flex flex-row p-6  pr-4 md:pr-12 pb-0">
       <p
         id="logo"
         className="font-light text-2xl bg-slate-600 text-white rounded-lg p-2 hover:scale-105 transition duration-300 hover:opacity-70 "

@@ -45,16 +45,16 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
 
   return (
     <>
-      <div className="mx-32 flex flex-row" id="product-detail-wrapper">
-        <div id="product-image">
+      <div className="md:mx-32 flex flex-col items-center md:items md:flex-row" id="product-detail-wrapper">
+        <div id="product-image" className="">
             <img
-              className="w-auto h-[600px] min-w-[200px] aspect-square object-contain"
+              className="w-auto h-[250px] float-left md:h-[600px] min-w-[200px] aspect-square object-contain"
               src={product.image_url}
               alt=""
             />
         </div>
-        <div className=" w-[800px] mx-7" id="product-details">
-          <h1 className="text-5xl font-bold text-cyan-700">{product.name}</h1>
+        <div className="w-[300px] md:w-[800px] ml-4 md:mx-7" id="product-details">
+          <h1 className= "text-2xl md:text-5xl font-bold text-cyan-700">{product.name}</h1>
           <div id="product-reviews" className="mt-3 grid grid-cols-2 grid-rows-1 w-[45%]">
             <div className="text-red-600 grid grid-cols-5 grid-rows-1">
               <AiFillStar />
@@ -66,7 +66,7 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
             <p className="font-thin italic">(20)</p>
           </div>
           <div className="w-[100%] my-2" id="product-details-desc">
-            <h4 className="text-cyan-700 text-2xl font-bold">Details:</h4>
+            <h4 className="text-cyan-700 text-lg  md:text-2xl font-bold">Details:</h4>
             <p className="w-[100%] pt-1">
               {product.tags.map((tag) => tag + ", ")}
               {product.format}, {product.category}. Lorem ipsum dolor sit amet
@@ -75,31 +75,31 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
               ipsam, impedit aperiam deleniti hic expedita quia non, ea
               repellat.
             </p>
-            <p className="pt-4 text-4xl text-red-600 font-bold">£{product.price}</p>
+            <p className="pt-2 md:pt-4 text-3xl md:text-4xl text-red-600 font-bold">£{product.price}</p>
           </div>
           <div id="product-quantity">
             <h3 className="text-2xl text-cyan-700 font-bold">Quantity:</h3>
-            <p className="flex flex-row text-2xl py-2" id="quantity-desc">
-              <span className="py-4 px-8 outline outline-1 border cursor-pointer" id="minus" onClick={() => {decQty()}}>
+            <p className="flex flex-row text-lg md:text-2xl py-2" id="quantity-desc">
+              <span className="py-3 md:py-4 px-6 md:px-8 outline outline-1 border cursor-pointer" id="minus" onClick={() => {decQty()}}>
                 <AiOutlineMinus />
               </span>
-              <span className="py-4 px-6 outline outline-1 border" id="num">
+              <span className="py-2 md:py-4 px-4 md:px-6 outline outline-1 border" id="num">
                 {qty}
               </span>
-              <span className="py-4 px-8 outline outline-1 border cursor-pointer" id="plus" onClick={() => {incQty()}}>
+              <span className="py-3 md:py-4 px-6 md:px-8 outline outline-1 border cursor-pointer" id="plus" onClick={() => {incQty()}}>
                 <AiOutlinePlus />
               </span>
             </p>
           </div>
-          <div className="mt-8 flex flex-col w-[45%] "id="product-buttons">
+          <div className="mt-8 flex mx-auto md:mx-0 flex-col w-[100%] md:w-[45%] "id="product-buttons">
             <button
-              className="outline outline-1 text-cyan-700 font-bold mb-4 px-10 py-2"
+              className="outline outline-1 text-cyan-700 font-bold mb-4 px-10 py-5 md:py-2"
               onClick={() => onAdd({ product, quantity: qty })}
             >
               Add to Cart
             </button>
             <button
-              className="bg-cyan-700 text-white font-bold my-4 px-10 py-2"
+              className="bg-cyan-700 text-white font-bold my-4 px-10 py-5 md:py-2"
               onClick={() => {handleBuyNow()}}
             >
               Buy Now
@@ -108,7 +108,7 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
         </div>
       </div>
       <div id="may-like-wrapper">
-        <h2 className=" text-center text-4xl font-bold text-cyan-700 mb-8">You may also like:</h2>
+        <h2 className=" text-center text-4xl font-bold text-cyan-700 mb-4 md:mb-8">You may also like:</h2>
         <ProductCarousel items={suggestedProducts} type="autoScroll"></ProductCarousel>
       </div>
     </>
