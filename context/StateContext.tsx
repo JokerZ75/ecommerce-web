@@ -46,6 +46,27 @@ export const StateContext = ({ children }: any) => {
   const [cartTotal, setCartTotal] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [qty, setQty] = useState(1);
+  const isMounted = React.useRef(false);
+
+  useEffect(() => {
+    setCartItems(JSON.parse(localStorage.getItem("cartItems") || "[]"));
+    setCartTotal(JSON.parse(localStorage.getItem("cartTotal") || "0"));
+    setTotalQuantity(JSON.parse(localStorage.getItem("totalQuantity") || "0"));
+  }, []);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      localStorage.setItem("cartTotal", JSON.stringify(cartTotal));
+      localStorage.setItem("totalQuantity", JSON.stringify(totalQuantity));
+      console.log(localStorage.getItem("cartTotal"));
+    }
+    else {
+      isMounted.current = true;
+    }
+  }, [cartItems, cartTotal, totalQuantity]);
+
+  const updateLocalStorage = () => {};
 
   let foundProduct: CartItemsInterface | undefined;
   let index;
@@ -75,6 +96,7 @@ export const StateContext = ({ children }: any) => {
     }
     setQty(1);
     toast.success(`${qty} ${product.name} added to cart`);
+    updateLocalStorage();
   };
 
   const toggleCartItemQuantity = (id: number, value: "inc" | "dec") => {
@@ -117,7 +139,6 @@ export const StateContext = ({ children }: any) => {
             else return prevCartTotal;
           });
           setTotalQuantity((prevTotalQuantity) => prevTotalQuantity - 1);
-          toast.error(`${foundProduct.name} removed from cart`);
         }
       }
     }
