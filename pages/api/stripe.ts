@@ -73,9 +73,8 @@ export default async function handler(
             };
           }),
           success_url: `${req.headers.origin}/success`,
-          cancel_url: `${req.headers.origin}/canceled`,
+          cancel_url: `${req.headers.origin}/`,
         };
-        // Create Checkout Sessions from body params.
         // @ts-ignore
         const session = await stripe.checkout.sessions.create(params);
         res.status(200).json(session);
