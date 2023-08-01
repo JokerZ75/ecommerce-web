@@ -74,7 +74,7 @@ const Cart = () => {
       ></div>
       <div
         id="cart-container"
-        className="fixed top-0 right-0 w-[500px] h-screen bg-white z-50 overflow-y-scroll"
+        className="fixed top-0 right-0 w-screen md:w-[500px] h-screen bg-white z-50 overflow-y-scroll"
       >
         <div
           id="cart-header"
