@@ -36,7 +36,12 @@ interface ProductDetails {
 }
 
 const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
-  const { qty, incQty, decQty, onAdd } = useStateContext();
+  const { qty, incQty, decQty, onAdd,setShowCart } = useStateContext();
+
+  const handleBuyNow = () => {
+    onAdd({ product, quantity: qty });
+    setShowCart(true);
+  };
 
   return (
     <>
@@ -78,7 +83,7 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
               <span className="py-4 px-8 outline outline-1 border cursor-pointer" id="minus" onClick={() => {decQty()}}>
                 <AiOutlineMinus />
               </span>
-              <span className="py-4 px-6 outline outline-1 border" id="num" onClick={() => {}}>
+              <span className="py-4 px-6 outline outline-1 border" id="num">
                 {qty}
               </span>
               <span className="py-4 px-8 outline outline-1 border cursor-pointer" id="plus" onClick={() => {incQty()}}>
@@ -95,7 +100,7 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
             </button>
             <button
               className="bg-cyan-700 text-white font-bold my-4 px-10 py-2"
-              onClick={() => {}}
+              onClick={() => {handleBuyNow()}}
             >
               Buy Now
             </button>

@@ -13,6 +13,9 @@ interface Context {
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
   toggleCartItemQuantity: (id: number, value: "inc" | "dec") => void;
   onRemove: (id: number) => void;
+  setCartItems: React.Dispatch<React.SetStateAction<CartItemsInterface[]>>;
+  setCartTotal: React.Dispatch<React.SetStateAction<number>>;
+  setTotalQuantity: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface ProductInterface {
@@ -167,6 +170,9 @@ export const StateContext = ({ children }: any) => {
         setShowCart,
         toggleCartItemQuantity,
         onRemove,
+        setCartItems,
+        setCartTotal,
+        setTotalQuantity,
       }}
     >
       {children}

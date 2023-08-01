@@ -21,7 +21,7 @@ const FooterBanner = (
   return (
     <>
       <div>
-        <div className="bg-stone-300 rounded-xl h-[100%] max-h-[50vh] relative flex shadow-xl shadow-black  ">
+        <div className="bg-stone-300 rounded-xl h-[100%] max-h-[55vh] relative flex shadow-xl shadow-black  ">
           <div className="flex flex-col p-10 pb-5 pr-8 ">
             <div className="">
               <p className="text-6xl text-red-600 font-bold">ON SALE NOW</p>
@@ -40,7 +40,7 @@ const FooterBanner = (
                 </button>
               </Link>
             </div>
-            <div className="mt-auto flex flex-col">
+            <div className="mt-auto flex flex-col pb-5">
               <h4 className="text-lg font-bold text-cyan-700">Description</h4>
               <p className="font-light">
                 {saleProduct.tags.map((tag) => tag + ", ")}
