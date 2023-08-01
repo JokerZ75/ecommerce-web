@@ -51,7 +51,7 @@ export async function getStaticProps() {
       .collection("catologue")
       .find({ price: { $gt: 100 } })
       .limit(1)
-      .skip(randomInt(0, 20))
+      .skip(randomInt(0, 11))
       .toArray();
 
     const bestSellerProduct = JSON.parse(JSON.stringify(bestSeller[0]));
