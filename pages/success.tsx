@@ -16,7 +16,7 @@ const Success = () => {
   }, []);
 
   return (
-    <div id="success-wrapper" className="bg-slate-300 flex items-center justify-center mx-[25%] p-8 rounded-lg" >
+    <div id="success-wrapper" className="bg-slate-300 flex items-center justify-center md:mx-[25%] p-8 rounded-lg" >
         <div className="flex flex-col items-center justify-center p-5 pb-20">
             <BsBagCheckFill className="text-9xl text-green-600 mt-8" />
             <h1 className="text-4xl font-bold text-center">Thank you for your order!</h1>
