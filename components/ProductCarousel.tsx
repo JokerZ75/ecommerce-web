@@ -3,11 +3,9 @@ import {
   faChevronCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Product } from "../components";
 import { useIntersection } from "@mantine/hooks";
-import { machine } from "os";
-import { parse } from "path";
 
 interface ProductInterface {
   brand: string;
@@ -32,7 +30,7 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
   const hasWindow = typeof window !== "undefined";
   const windowWidth = hasWindow ? window.innerWidth : 0;
   const [scroll, setScroll] = useState("0");
-  const scrollDistance = windowWidth > 768 ? 750 : 450;
+  const scrollDistance = windowWidth > 768 ? 750 : 255;
 
   const leftArrowRef = useRef<HTMLDivElement>(null);
   const rightArrowRef = useRef<HTMLDivElement>(null);
@@ -41,7 +39,7 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
   const lastProductRef = useRef<HTMLDivElement>(null);
   const { ref, entry } = useIntersection({
     root: lastProductRef.current,
-    threshold: 0,
+    threshold: 1,
   });
 
   if (entry?.isIntersecting) {
@@ -56,14 +54,9 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
       const productContainer = productContainerRef.current;
       const leftArrow = leftArrowRef.current;
       if (type == "autoScroll") {
+        productContainerRef.current?.classList.add("autoScroll")
         if (leftArrow) leftArrow.style.display = "none";
         if (rightArrowRef.current) rightArrowRef.current.style.display = "none";
-        if (productContainer) {
-          const scrollWidth = productContainer.childNodes.length * 150;
-          if (parseInt(scroll) - 150 <= -scrollWidth) {
-            setScroll((scroll) => (0).toString());
-          }
-        }
       }
       if (productContainer) {
         productContainer.style.transform = `translateX(${scroll}px)`;
@@ -78,17 +71,6 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
     };
     updateScroll();
   }, [scroll]);
-
-  useMemo(() => {
-    if (type == "autoScroll") {
-      const auto = async () => {
-        setInterval(() => {
-          setScroll((scroll) => (parseInt(scroll) - 150).toString());
-        }, 1500);
-      };
-      auto();
-    }
-  }, []);
 
   const handleClick = async (type: string) => {
     const productContainer = productContainerRef.current;
