@@ -58,7 +58,7 @@
     width: max-content;
     flex-wrap: nowrap;
     gap: 1rem;
-    animation: scroll 70s linear infinite;
+    animation: scroll 60s linear infinite;
   }
 
   @keyframes scroll {

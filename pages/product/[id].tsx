@@ -11,6 +11,7 @@ import {
 import ProductCarousel from "@/components/ProductCarousel";
 import { useStateContext } from "@/context/StateContext";
 import Scroller from "../../components/Scroller";
+import { Product } from "@/components";
 
 interface ProductInterface {
   brand: string;
@@ -156,20 +157,7 @@ const ProductDetails: FC<ProductDetails> = ({ product, suggestedProducts }) => {
               key={product._id}
               className="m-1 mt-0 p-2 w-[250px] h-[350px] hover:scale-105 group transition duration-300 ease-in-out "
             >
-              <div>
-                <img
-                  className="rounded-md object-cover w-[250px] h-[250px] group-hover:opacity-75 transition duration-300 ease-in-out"
-                  src={product.image_url}
-                  alt={`An image of ${product.name}`}
-                />
-                <div
-                  className="pl-1
-                "
-                >
-                  <p className="text-2xl font-bold ">{product.name}</p>
-                  <p className="text-xl font-light ">£{product.price}</p>
-                </div>
-              </div>
+              <Product {...product} />
             </li>
           ))}
         </Scroller>
