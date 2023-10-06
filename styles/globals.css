@@ -2,22 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer utilities {
-    /* deploy */
-    .autoScroll {
-        animation: scrolling 30s linear infinite;
+  /* deploy */
+  .autoScroll {
+    animation: scrolling 30s linear infinite;
+  }
+
+  @keyframes scrolling {
+    0% {
+      transform: translateX(0);
     }
-     
-    @keyframes scrolling {
-        0% {
-            transform: translateX(0%);
-        }
-        50% {
-            transform: translateX(-85%);
-        }
-        100% {
-            transform: translateX(0%);
-        }
+    100% {
+      transform: translateX(-100%);
     }
+  }
+
+  .scroller {
+    max-width: 100%;
+    border-radius: 0.25rem;
+    padding: 0.1rem 0.5rem 1rem 0.5rem;
+  }
+  .scroller__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem;
+    list-style: none;
+    padding: 0;
+  }
+
+
+
+  .scroller[data-animated="true"] {
+    transition: all 0.5s ease-in-out;
+    overflow: hidden;
+    max-width: max-content;
+    padding-bottom: 1rem;
+    -webkit-mask: linear-gradient(
+      90deg,
+      transparent,
+      white 5%,
+      white 95%,
+      transparent
+    );
+    mask: linear-gradient(
+      90deg,
+      transparent,
+      white 5%,
+      white 95%,
+      transparent
+    );
+  }
+
+  .scroller[data-animated="true"] > .scroller__inner {
+    width: max-content;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    animation: scroll 70s linear infinite;
+  }
+
+  @keyframes scroll {
+    to {
+      transform: translateX(calc(-50% - 0.5rem));
+    }
+  }
 }

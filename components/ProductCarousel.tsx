@@ -20,12 +20,10 @@ interface ProductInterface {
 
 interface ProductCarouselProps {
   items: ProductInterface[];
-  type?: "autoScroll" | null;
 }
 
 const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
-  items,
-  type,
+  items
 }) => {
   const hasWindow = typeof window !== "undefined";
   const windowWidth = hasWindow ? window.innerWidth : 0;
@@ -53,18 +51,13 @@ const ProductCarousel: FunctionComponent<ProductCarouselProps> = ({
     const updateScroll = async () => {
       const productContainer = productContainerRef.current;
       const leftArrow = leftArrowRef.current;
-      if (type == "autoScroll") {
-        productContainerRef.current?.classList.add("autoScroll")
-        if (leftArrow) leftArrow.style.display = "none";
-        if (rightArrowRef.current) rightArrowRef.current.style.display = "none";
-      }
       if (productContainer) {
         productContainer.style.transform = `translateX(${scroll}px)`;
       }
       if (leftArrow) {
         if (scroll == "0") {
           leftArrow.style.display = "none";
-        } else if (type != "autoScroll") {
+        } else if (scroll != "0") {
           leftArrow.style.display = "block";
         }
       }
